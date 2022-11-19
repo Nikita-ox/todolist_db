@@ -1,4 +1,5 @@
 # Diplom
+<<<<<<< HEAD
 Создал виртуальное окружение.
 
 Добавил созданное виртуальное окружение в проект.
@@ -16,3 +17,13 @@
 Установил djangorestframework, social-auth-app-django
 
 В todolist/urls.py добавил урлы из core/urls.py и social_django
+=======
+
+Начало дипломной работы.
+Поднят контейнер.
+psql -d todolist -U nik
+password внутри .env.txt
+База данных PostgreSQL
+Установить зависимости poetry init
+Запуск приложения: python manage.py runserver
+>>>>>>> 4adf8f8 (build)

@@ -6,7 +6,7 @@ services:
     image: postgres:13.0-alpine
     restart: always
     env_file:
-      - scr/.env.txt
+      - scr/.env
     volumes:
       - pg_data_todolist:/var/lib/postgresql/data
     healthcheck:
@@ -25,3 +25,5 @@ volumes:
 networks:
    backend_nw:
      driver: bridge
+
+     #drom

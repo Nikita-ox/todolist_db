@@ -23,7 +23,11 @@ env = environ.Env(
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+<<<<<<< HEAD
 environ.Env.read_env(BASE_DIR.joinpath('.env.txt'))
+=======
+environ.Env.read_env(BASE_DIR.joinpath('.env'))
+>>>>>>> 4adf8f8 (build)
 
 SECRET_KEY = env('SECRET_KEY')
 
