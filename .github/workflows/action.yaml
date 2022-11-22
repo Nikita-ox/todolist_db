@@ -37,7 +37,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/chekout@v3
-      - name: Decrypt ansible
         uses: anthonykgross/ansible-vault-cli-github-action@v1
         with:
           vault_key: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
