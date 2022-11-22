@@ -30,7 +30,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-#w
+
   deploy:
     runs-on: ubuntu-22.04
     needs: build
