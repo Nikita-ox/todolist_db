@@ -29,7 +29,8 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
- deploy:
+
+  deploy:
     runs-on: ubuntu-latest
     needs: build
     env:
@@ -39,9 +40,6 @@ jobs:
       POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
       POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
-      VK_OAUTH2_KEY: ${{ secrets.VK_OAUTH2_KEY }}
-      VK_OAUTH2_SECRET: ${{ secrets.VK_OAUTH2_SECRET }}
-      BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
 
     steps:
       - name: clone code
