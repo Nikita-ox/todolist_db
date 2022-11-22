@@ -17,7 +17,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{secret.DOCKERHUB_USERNAME}}/diplom1
+          images: ${{secrets.DOCKERHUB_USERNAME}}/diplom1
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
