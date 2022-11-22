@@ -43,7 +43,7 @@ jobs:
           command: "ansible-vault decrypt deploy/.env_example"
       - name: Update compose
         env:
-           DOCKERHUB_USERNAME: ${ secrets.DOCKERHUB_USERNAME }
+           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
         run:
           envsubst '$DOCKERHUB_USERNAME' < deploy/docker-compose.yaml > deploy/tmp.docker-compose.yaml
           mv deploy/tmp.docker-compose.yaml deploy/docker-compose.yaml
