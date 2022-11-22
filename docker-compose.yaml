@@ -32,7 +32,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    #    restart: always
+#    restart: always
     env_file:
       - .env_example
     environment:

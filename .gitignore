@@ -120,7 +120,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-deploy_locally/.env_example
+deploy/.env_example
 .venv
 env/
 venv/
