@@ -5,7 +5,6 @@ on:
     tags:
       - 'v*'
 
-
 jobs:
 
   build:
@@ -17,7 +16,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{secrets.DOCKERHUB_USERNAME}}/diplom1
+          images: ${{secrets.DOCKERHUB_USERNAME}}/DB_project
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
@@ -30,31 +29,41 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
   deploy:
     runs-on: ubuntu-22.04
     needs: build
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - uses: anthonykgross/ansible-vault-cli-github-action@v1
+      - name: Decrypt ansible
+        uses: anthonykgross/ansible-vault-cli-github-action@v1
         with:
           vault_key: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
           command: "ansible-vault decrypt deploy/.env_example"
       - name: Update compose
         env:
-           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-        run:  |
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        run: |
           envsubst '$DOCKERHUB_USERNAME' < deploy/docker-compose.yaml > deploy/tmp.docker-compose.yaml
           mv deploy/tmp.docker-compose.yaml deploy/docker-compose.yaml
-
+          mv static deploy/static -f
       - name: Copy on server
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
-          script: |
-            cd todolist
+          source: "deploy/*"
           target: todolist
           strip_components: 1
+      - name: Run compose
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            cd todolist
+            docker-compose pull
+            docker-compose up -d
+            docker system prune -a -f
