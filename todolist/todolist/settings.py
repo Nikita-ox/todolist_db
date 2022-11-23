@@ -7,21 +7,16 @@ env = environ.Env(
     DEBUG=(bool, False)
 )
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 environ.Env.read_env(BASE_DIR.joinpath('../.env_example'))
-
-
 
 SECRET_KEY = env('SECRET_KEY')
 
 DEBUG = env('DEBUG')
 
-
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=["*"])
 
 # Application definition
 
@@ -32,6 +27,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    # 'social_django'
     'core',
 ]
 
