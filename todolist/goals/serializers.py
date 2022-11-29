@@ -1,7 +1,5 @@
-from django.db import transaction
 from rest_framework import serializers
 
-# Категории
 from core.serializers import ProfileSerializer
 from goals.models import GoalCategory
 
