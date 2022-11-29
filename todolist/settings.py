@@ -10,7 +10,7 @@ env = environ.Env(
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-environ.Env.read_env(BASE_DIR.joinpath('../.env_example'))
+environ.Env.read_env(BASE_DIR.joinpath('./.env_example'))
 
 SECRET_KEY = env('SECRET_KEY')
 
@@ -30,7 +30,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'social_django',
     'core',
-    'goals',
+    'goals'
 ]
 
 MIDDLEWARE = [
@@ -136,3 +136,16 @@ SOCIAL_AUTH_VK_EXTRA_DATA = [
 ]
 SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/logged-in/'
 SOCIAL_AUTH_USER_MODEL = 'core.User'
+
+
+# Rest-framework, swagger
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Todolist API',
+    'DESCRIPTION': 'API for todolist application',
+    'VERSION': '1.0.0',
+}

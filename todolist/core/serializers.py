@@ -34,21 +34,15 @@ class CreateUserSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 
-class LoginSerializer(serializers.ModelSerializer):
+class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(required=True)
-    password = PasswordField(required=True)
+    password = serializers.CharField(required=True)
 
-    class Meta:
-        model = User
-        fields = ("username", "password")
-
-    def create(self, validated_data: dict):
-        if not (user := authenticate(
-                username=validated_data["username"],
-                password=validated_data["password"]
-        )):
-            raise AuthenticationFailed
-        return user
+    def validate_username(self, value):
+        """Ensure username exists"""
+        if not User.objects.filter(username=value).exists():
+            raise serializers.ValidationError(["User with such username doesn't exist"])
+        return value
 
 
 class ProfileSerializer(serializers.ModelSerializer):
