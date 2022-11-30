@@ -55,8 +55,12 @@ class GoalCreateSerializer(serializers.ModelSerializer):
             if self.context['request'].user != value.user:
                 raise PermissionDenied
 
-            if self.instance.category.board_id != value.board_id:
-                raise serializers.ValidationError('Transfer between projects not allowed')
+            if not BoardParticipant.objects.filter(
+                    board_id=value.board.id,
+                    role__in=[BoardParticipant.Role.owner, BoardParticipant.Role.writer],
+                    user=self.context["request"].user,
+            ).exists():
+                raise PermissionDenied
             return value
 
 

@@ -47,7 +47,7 @@ class GoalCategoryView(RetrieveUpdateDestroyAPIView):
     permission_classes = [GoalCategoryPermissions, IsOwnerOrReadOnly]
 
     def get_queryset(self):
-        return GoalCategory.objects.prefetch_related('participants').filter(
+        return GoalCategory.objects.prefetch_related('board__participants').filter(
             board__participants__user_id=self.request.user.id,
             is_deleted=False
         )
@@ -63,6 +63,7 @@ class GoalCategoryView(RetrieveUpdateDestroyAPIView):
 class GoalCreateView(CreateAPIView):
     serializer_class = GoalCreateSerializer
     permission_classes = [GoalPermissions]
+
 
 
 class GoalListView(ListAPIView):
