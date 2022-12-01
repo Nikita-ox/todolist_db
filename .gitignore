@@ -160,5 +160,5 @@ cython_debug/
 .idea/
 .env_example/
 ./entrypoint.sh
-./
+./nginx.conf
 

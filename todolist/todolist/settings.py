@@ -13,6 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(BASE_DIR.joinpath('../.env_example'))
 
 SECRET_KEY = env('SECRET_KEY')
+BOT_TOKEN = env('BOT_TOKEN')
 
 DEBUG = env('DEBUG')
 
