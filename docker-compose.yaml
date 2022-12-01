@@ -49,6 +49,21 @@ services:
     networks:
       - backend_nw
 
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    env_file:
+      - .env_example
+    environment:
+      POSTGRES_HOST: postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: python manage.py runbot
+    networks:
+      - backend_nw
 
 volumes:
   pg_data_todolist:

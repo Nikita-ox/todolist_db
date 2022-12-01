@@ -4,6 +4,7 @@ from enum import IntEnum, auto
 from django.core.management import BaseCommand
 from bot.models import TgUser
 from bot.tg.client import TgClient
+from bot.tg.fsm.memory_storage import MemoryStorage
 from bot.tg.models import Message
 from pydantic import BaseModel
 
@@ -31,7 +32,7 @@ class Command(BaseCommand):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.tg_client = TgClient(settings.BOT_TOKEN)
-        # self.storage = MemoryStorage()
+        self.storage = MemoryStorage()
 
     @staticmethod
     def _generate_verification_code() -> str:
@@ -56,7 +57,6 @@ class Command(BaseCommand):
             self.tg_client.send_message(msg.chat.id, "\n".join(result))
         else:
             self.tg_client.send_message(msg.chat.id, "[you have no goals!]")
-
 
     def handle_goal_categories_list(self, msg: Message, tg_user: TgUser):
         resp_categories: list[str] = [
