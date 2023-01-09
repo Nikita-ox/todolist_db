@@ -120,7 +120,6 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-deploy/.env_example
 .venv
 env/
 venv/
@@ -161,4 +160,5 @@ cython_debug/
 ./entrypoint.sh
 ./nginx.conf
 ./venv
+./.env_example
 
