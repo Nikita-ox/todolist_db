@@ -1,65 +1,55 @@
-version: '3.9'
-
 services:
   frontend:
     image: sermalenk/skypro-front:lesson-38
-    restart: on-failure
+    restart: always
     depends_on:
       - api
     ports:
-      - "80:80"
-    volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
-    networks:
-      - backend_nw
+      - 80:80
 
   postgres:
-    image: postgres:13.0-alpine
-#    restart: always
-    env_file:
-      - .env_example
+    image: postgres:12.4-alpine
     volumes:
-      - pg_data_todolist:/var/lib/postgresql/data
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U nik -d todolist" ]
-      interval: 5s
-      timeout: 3s
-      retries: 3
-    networks:
-      - backend_nw
-
-  api:
-    image: ${DOCKERHUB_USERNAME}/diplom1:latest
-#    restart: always
-    env_file:
-      - .env_example
+      - postgres_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_HOST: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nik -d todolist"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  api:    
+    image: ${DOCKERHUB_USERNAME}/diplom1:latest
     depends_on:
       postgres:
         condition: service_healthy
-    networks:
-      - backend_nw
-
-
- bot:
-    ${DOCKERHUB_USERNAME}/diplom1:latest
+      migrations:
+        condition: service_completed_successfully
     restart: always
     env_file:
-      - .env_example
-    environment:
-      POSTGRES_HOST: postgres
+      - .env
+
+  bot:
+    image: ${DOCKERHUB_USERNAME}/diplom1:latest
+    restart: always
     depends_on:
+      migrations:
+        condition: service_completed_successfully
       postgres:
         condition: service_healthy
+    environment:
+      DB_USER: nik
+      DB_PASSWORD: e1a7661
+      DB_NAME: todolist
+      DB_HOST: 'postgres'
+      SECRET_KEY: 67011542579f46cd712f69aa5b6c7bc6
+      SOCIAL_AUTH_VK_OAUTH2_KEY: 51484656
+      SOCIAL_AUTH_VK_OAUTH2_SECRET: Wf7mEOGUyBGgNCmJ92aB
+      BOT_TOKEN: AAHOjcDXOIkRIEnFXTCMKQHuwDiicA1rvUg
     command: python manage.py runbot
-    networks:
-      - backend_nw
-
 
 volumes:
-  pg_data_todolist:
-
-networks:
-  backend_nw:
-    driver: bridge
+  postgres_data:
