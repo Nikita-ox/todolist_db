@@ -1,4 +1,8 @@
 # Diplom
+
+Написание программы "Планировщик задач" по типу Todoist
+
+
 psql -d todolist -U nik
 password внутри .env_example
 База данных PostgreSQL
