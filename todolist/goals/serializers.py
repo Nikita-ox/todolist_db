@@ -6,7 +6,7 @@ from rest_framework.exceptions import PermissionDenied
 
 from core.models import User
 from core.serializers import ProfileSerializer
-from goals.models import GoalCategory, Goal, GoalComment, Board, BoardParticipant
+from goals.models import GoalCategory, Board, BoardParticipant, Goal, GoalComment
 
 
 class GoalCategoryCreateSerializer(serializers.ModelSerializer):
@@ -176,7 +176,6 @@ class BoardSerializer(serializers.ModelSerializer):
             if title := validated_data.get('title'):
                 instance.title = title
                 instance.save()
-
 
         return instance
     #

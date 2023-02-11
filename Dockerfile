@@ -5,5 +5,5 @@ RUN pip install -r requirements.txt
 EXPOSE 8000
 COPY . .
 
-ENTRYPOINT ["bash", "entrypoint.sh"]
+CMD python ./todolist/manage.py migrate
 CMD python ./todolist/manage.py runserver 0.0.0.0:8000

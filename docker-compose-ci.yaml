@@ -1,0 +1,59 @@
+version: '3.9'
+services:
+  front:
+    image: sermalenk/skypro-front:lesson-38
+    ports:
+      - 80:80
+    depends_on:
+      - api
+    networks:
+      - backend
+
+  api:
+    image: nssavinykh/todolistishe:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    env_file:
+      - ./.env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./.docker_env:/code/.docker_env
+    networks:
+      - backend
+
+
+  postgres:
+    image: postgres:15.1-alpine
+    restart: always
+    env_file:
+      - ./.env
+    volumes:
+      - db:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}
+      interval: 5s
+      timeout: 3s
+      retries: 3
+    networks:
+      - backend
+
+  bot:
+    image: nssavinykh/todolistishe:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    env_file:
+      - ./.env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./.docker_env:/code/.docker_env
+    networks:
+      - backend
+    command: python ./todolist/manage.py runbot
+
+volumes:
+  db:
+  .docker_env:
+
+networks:
+  backend:
+    driver: bridg

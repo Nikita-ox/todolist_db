@@ -65,14 +65,12 @@ class GoalCreateView(CreateAPIView):
     permission_classes = [GoalPermissions]
 
 
-
 class GoalListView(ListAPIView):
     model = Goal
     permission_classes = [GoalPermissions]
     serializer_class = GoalSerializer
     filterset_class = GoalDateFilter
     filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
-    # filterset_fields = ['category', 'priority', 'status']
     ordering_fields = ["title", 'created']
     ordering = ["title"]
     search_fields = ["title", "description"]
